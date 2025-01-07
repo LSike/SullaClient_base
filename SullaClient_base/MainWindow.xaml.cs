@@ -1,7 +1,9 @@
 ﻿using SullaClient_base.Models;
+using System.Collections.Immutable;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -44,7 +46,8 @@ namespace SullaClient_base
                 {
                     MessageBox.Show("Login successful");
                     string resp = response.Result.Content.ReadAsStringAsync().Result;
-                    token = resp.Split('"')[3];
+                    Dictionary<string, string> dict = JsonSerializer.Deserialize<Dictionary<string, string>>(resp);
+                    token = dict["token"]; //resp.Split('"')[3];
                     MessageBox.Show(token);
                     client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                 }
